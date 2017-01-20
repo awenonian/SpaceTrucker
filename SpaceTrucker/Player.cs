@@ -23,7 +23,7 @@ namespace SpaceTrucker
         {
             //All of these numbers need tweaking.
             moveSpeed = 150f;
-            thrust = 50f;
+            thrust = 300f;
             turnSpeed = 10f;
 
             controlScheme = 0;
@@ -36,6 +36,7 @@ namespace SpaceTrucker
         public override void update(GameTime gameTime, int width, int height)
         {
             base.update(gameTime, width, height);
+            System.Console.WriteLine(Position.X + ", " + Position.Y);
             // Code goes here
         }
 
@@ -99,11 +100,11 @@ namespace SpaceTrucker
 
                     if (state.IsKeyDown(Keys.W))
                     {
-                        Speed += thrust * new Vector2((float)Math.Cos(Facing), (float)Math.Sin(Facing));
+                        Speed += (float)(thrust * gameTime.ElapsedGameTime.TotalSeconds) * new Vector2((float)Math.Cos(Facing), (float)Math.Sin(Facing));
                     }
                     else if (state.IsKeyDown(Keys.S))
                     {
-                        Speed -= thrust * new Vector2((float)Math.Cos(Facing), (float)Math.Sin(Facing));
+                        Speed -= (float)(thrust * gameTime.ElapsedGameTime.TotalSeconds) * new Vector2((float)Math.Cos(Facing), (float)Math.Sin(Facing));
                     }
                     if (Speed.Length() > moveSpeed)
                     {
@@ -134,19 +135,16 @@ namespace SpaceTrucker
                         direction += Vector2.UnitX;
                     }
 
-                    Facing = Math.Atan2(direction.Y, direction.X);
-                    direction.Normalize();
-                    Speed = direction * moveSpeed;
-
+                    if (direction != Vector2.Zero) { 
+                        Facing = Math.Atan2(direction.Y, direction.X);
+                        direction.Normalize();
+                    }
+                    Speed = direction * moveSpeed; // For some reason doesn't zero?
                     break;
                 default:
                     //Should never happen
                     break;
-
             }
-
-            
-
         }
     }
 }
