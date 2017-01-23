@@ -36,7 +36,12 @@ namespace SpaceTrucker
         public override void update(GameTime gameTime, int width, int height)
         {
             base.update(gameTime, width, height);
-            System.Console.WriteLine(Position.X + ", " + Position.Y);
+
+            if (controlScheme == 2)
+            {
+                Speed = Vector2.Zero;
+            }
+            
             // Code goes here
         }
 
@@ -51,7 +56,7 @@ namespace SpaceTrucker
             //I'm gonna leave these in the shit state they are, because I don't have a gamepad to test with right now
             if (state.ThumbSticks.Left.Length() > .25)
             {
-                Speed = new Vector2(moveSpeed * state.ThumbSticks.Left.X, state.ThumbSticks.Left.X);
+                Speed = new Vector2(moveSpeed * state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y);
             }
         }
 
@@ -108,8 +113,7 @@ namespace SpaceTrucker
                     }
                     if (Speed.Length() > moveSpeed)
                     {
-                        Speed.Normalize();
-                        Speed *= moveSpeed;
+                        Speed = Vector2.Normalize(Speed) * moveSpeed;
                     }
                     break;
                 case 2: //Move in direction pressed
@@ -135,11 +139,14 @@ namespace SpaceTrucker
                         direction += Vector2.UnitX;
                     }
 
-                    if (direction != Vector2.Zero) { 
+                    if (!direction.Equals(Vector2.Zero))
+                    { 
                         Facing = Math.Atan2(direction.Y, direction.X);
-                        direction.Normalize();
+                        direction = Vector2.Normalize(direction);
                     }
-                    Speed = direction * moveSpeed; // For some reason doesn't zero?
+
+                    Speed = direction * moveSpeed; // Input doesn't get called unless the 
+                    
                     break;
                 default:
                     //Should never happen
