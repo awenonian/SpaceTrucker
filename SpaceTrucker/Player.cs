@@ -36,11 +36,6 @@ namespace SpaceTrucker
         public override void update(GameTime gameTime, int width, int height)
         {
             base.update(gameTime, width, height);
-
-            if (controlScheme == 2)
-            {
-                Speed = Vector2.Zero;
-            }
             
             // Code goes here
         }
@@ -57,6 +52,13 @@ namespace SpaceTrucker
             if (state.ThumbSticks.Left.Length() > .25)
             {
                 Speed = new Vector2(moveSpeed * state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y);
+            }
+            else
+            {
+                if (controlScheme == 2)
+                {
+                    Speed = Vector2.Zero;
+                }
             }
         }
 
@@ -145,7 +147,7 @@ namespace SpaceTrucker
                         direction = Vector2.Normalize(direction);
                     }
 
-                    Speed = direction * moveSpeed; // Input doesn't get called unless the 
+                    Speed = direction * moveSpeed; // This doesn't get called if no keypress is registered
                     
                     break;
                 default:
