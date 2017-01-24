@@ -16,6 +16,9 @@ namespace SpaceTrucker
         private Texture2D playerSprite;
         private Mesh playerMesh;
 
+        private Texture2D bulletSprite;
+        private Mesh bulletMesh;
+
         public Player Player { get; private set; }
 
         public List<Bullet> bullets;
@@ -55,8 +58,13 @@ namespace SpaceTrucker
         public void loadContent(ContentManager content)
         {
             //<variable> = content.Load<Texture2D>(<filename w/o extension>);
+
             playerSprite = content.Load<Texture2D>("EnemyShip"); //Placeholder sprite, but eh.
             playerMesh = new Mesh(playerSprite, true); //Switch to false to get more accurate mesh
+
+            bulletSprite = content.Load<Texture2D>("Bullet"); //Placeholder sprite, but eh.
+            bulletMesh = new Mesh(bulletSprite, true); //Switch to false to get more accurate mesh
+            Bullet.setMesh(bulletMesh);
         }
 
         public void update(GameTime gameTime, KeyboardState kState, KeyboardState prevKState, MouseState mState, MouseState prevMState, GamePadState gState, GamePadState prevGState)
@@ -91,6 +99,15 @@ namespace SpaceTrucker
             }
             Player.update(gameTime, width, height);
 
+            for (int i = bullets.Count-1; i >= 0; i--)
+            {
+                bullets[i].update(gameTime, width, height);
+                if (bullets[i].Position.X < 0 || bullets[i].Position.X > width || bullets[i].Position.Y < 0 || bullets[i].Position.Y > height)
+                {
+                    bullets.Remove(bullets[i]);
+                }
+            }
+
         }
 
         public void draw(SpriteBatch sb)
@@ -99,6 +116,17 @@ namespace SpaceTrucker
             sb.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
             Player.draw(sb);
             sb.End();
+            sb.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
+            foreach (Bullet b in bullets)
+            {
+                b.draw(sb);
+            }
+            sb.End();
+        }
+
+        public void addBullet(Bullet b)
+        {
+            bullets.Add(b);
         }
     }
 }

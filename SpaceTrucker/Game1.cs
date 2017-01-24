@@ -40,7 +40,7 @@ namespace SpaceTrucker
             manager.initialize(
                 width: graphics.GraphicsDevice.Viewport.Width,
                 height: graphics.GraphicsDevice.Viewport.Height);
-            IsMouseVisible = false;
+            IsMouseVisible = true;
 
             prevKState = Keyboard.GetState();
             prevGState = GamePad.GetState(PlayerIndex.One);

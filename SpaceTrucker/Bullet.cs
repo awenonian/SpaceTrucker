@@ -9,9 +9,19 @@ namespace SpaceTrucker
 {
     class Bullet : Object
     {
-        public Bullet(Mesh mesh, Vector2 position, Vector2 speed) : base(mesh, position)
+
+        private static float moveSpeed = 1000f;
+
+        private static Mesh bulletMesh;
+
+        public Bullet(Vector2 position, Vector2 direction) : base(bulletMesh, position)
         {
-            Speed = speed;
+            Speed = Vector2.Normalize(direction) * moveSpeed;
+        }
+
+        public static void setMesh(Mesh m)
+        {
+            bulletMesh = m;
         }
     }
 }

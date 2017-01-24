@@ -24,3 +24,4 @@ C:\Users\aweno\Documents\Visual Studio 2015\Projects\SpaceTrucker\SpaceTrucker\b
 C:\Users\aweno\Documents\Visual Studio 2015\Projects\SpaceTrucker\SpaceTrucker\obj\x86\Debug\SpaceTrucker.csprojResolveAssemblyReference.cache
 C:\Users\aweno\Documents\Visual Studio 2015\Projects\SpaceTrucker\SpaceTrucker\obj\x86\Debug\SpaceTrucker.exe
 C:\Users\aweno\Documents\Visual Studio 2015\Projects\SpaceTrucker\SpaceTrucker\obj\x86\Debug\SpaceTrucker.pdb
+C:\Users\aweno\Documents\Visual Studio 2015\Projects\SpaceTrucker\SpaceTrucker\bin\Windows\x86\Debug\Content\Bullet.xnb

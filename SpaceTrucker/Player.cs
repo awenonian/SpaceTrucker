@@ -48,13 +48,6 @@ namespace SpaceTrucker
             {
                 Speed = new Vector2(moveSpeed * state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y);
             }
-            else
-            {
-                if (controlScheme == 2)
-                {
-                    Speed = Vector2.Zero;
-                }
-            }
         }
 
         /// <summary>
@@ -72,7 +65,16 @@ namespace SpaceTrucker
 
             if (mState.LeftButton == ButtonState.Pressed && prevMState.LeftButton == ButtonState.Released)
             {
-                
+                // Find angle of fire, corrected for facing direction
+                double firingAngle = Math.Atan2(mState.Position.Y - Position.Y, mState.Position.X - Position.X) - Facing;
+                // If the angle is in the allowable area (full 180 on the left, 10 degree arc to the right)
+                // More accurately, if it's not in the disallowable area.
+                if (!((firingAngle > 180 && firingAngle < 265) || (firingAngle > 275 && firingAngle < 360)))
+                {
+                    // Correct back
+                    firingAngle += Facing;
+                    fire(new Vector2((float)Math.Cos(firingAngle), (float)Math.Sin(firingAngle)));
+                }
             }
 
             switch (controlScheme)
@@ -133,6 +135,12 @@ namespace SpaceTrucker
                     
                     break;
             }
+            Facing = Facing % 360;
+        }
+
+        private void fire(Vector2 direction)
+        {
+            manager.addBullet(new Bullet(Position, direction));
         }
     }
 }
