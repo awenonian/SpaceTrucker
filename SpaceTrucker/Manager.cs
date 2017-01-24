@@ -43,6 +43,7 @@ namespace SpaceTrucker
             this.height = height;
 
             Player = new Player(playerMesh, new Vector2(300, 100), this);
+            Object.setManager(this);
         }
 
         public void loadContent(ContentManager content)

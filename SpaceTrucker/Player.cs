@@ -17,19 +17,14 @@ namespace SpaceTrucker
 
         private int controlScheme;
 
-        private Manager manager;
-
-        public Player(Mesh mesh, Vector2 position, Manager manager) : base(mesh, position, manager)
+        public Player(Mesh mesh, Vector2 position) : base(mesh, position)
         {
             //All of these numbers need tweaking.
-            moveSpeed = 150f;
+            moveSpeed = 300f;
             thrust = 300f;
             turnSpeed = 10f;
 
             controlScheme = 0;
-
-            this.manager = manager;
-            Radius = 16;
 
         }
 
@@ -72,30 +67,11 @@ namespace SpaceTrucker
         {
             if (state.IsKeyDown(Keys.Space) && !prevState.IsKeyDown(Keys.Space))
             {
-                controlScheme = (controlScheme + 1) % 3;
+                controlScheme = (controlScheme + 1) % 2;
             }
             switch (controlScheme)
             {
-                case 0: //Turning, instant speed
-                    if (state.IsKeyDown(Keys.A))
-                    {
-                        Facing -= turnSpeed * gameTime.ElapsedGameTime.TotalSeconds;
-                    }
-                    else if (state.IsKeyDown(Keys.D))
-                    {
-                        Facing += turnSpeed * gameTime.ElapsedGameTime.TotalSeconds;
-                    }
-
-                    if (state.IsKeyDown(Keys.W))
-                    {
-                        Speed = moveSpeed * new Vector2((float)Math.Cos(Facing), (float)Math.Sin(Facing));
-                    }
-                    else if (state.IsKeyDown(Keys.S))
-                    {
-                        Speed = Vector2.Zero;
-                    }
-                    break;
-                case 1: //Turning, acceleration
+               case 0: //Turning, acceleration
                     if (state.IsKeyDown(Keys.A))
                     {
                         Facing -= turnSpeed * gameTime.ElapsedGameTime.TotalSeconds;
@@ -118,7 +94,7 @@ namespace SpaceTrucker
                         Speed = Vector2.Normalize(Speed) * moveSpeed;
                     }
                     break;
-                case 2: //Move in direction pressed
+                case 1: //Move in direction pressed
                     Vector2 direction = Vector2.Zero;
 
                     if (state.IsKeyDown(Keys.W))
@@ -149,9 +125,6 @@ namespace SpaceTrucker
 
                     Speed = direction * moveSpeed; // This doesn't get called if no keypress is registered
                     
-                    break;
-                default:
-                    //Should never happen
                     break;
             }
         }

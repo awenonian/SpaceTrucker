@@ -13,23 +13,19 @@ namespace SpaceTrucker
         public Mesh mesh { get; }
         private Vector2 position;
 
-        private Manager manager;
+        protected static Manager manager;
 
         public Vector2 Position { get; protected set; }
-
-        public double Radius { get; protected set; }
+        
         public Vector2 Speed { get; protected set; }
         public double Facing { get; protected set; }
 
-        public Object(Mesh mesh, Vector2 position, Manager manager)
+        public Object(Mesh mesh, Vector2 position)
         {
             this.mesh = mesh;
 
             Position = position;
             Speed = Vector2.Zero;
-            Radius = 0;
-
-            this.manager = manager;
         }
 
         /// <summary>
@@ -59,6 +55,11 @@ namespace SpaceTrucker
         public bool collision(Object other)
         {
             return mesh.collision(Position, other.Position, other.mesh);
+        }
+
+        public static void setManager(Manager m)
+        {
+            manager = m;
         }
     }
 }
