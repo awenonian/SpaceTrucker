@@ -13,7 +13,7 @@ namespace SpaceTrucker
         public Mesh mesh { get; }
         private Vector2 position;
 
-        protected static Manager manager;
+        protected static Manager manager = null;
 
         public Vector2 Position { get; protected set; }
         

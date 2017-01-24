@@ -13,6 +13,7 @@ namespace SpaceTrucker
         SpriteBatch spriteBatch;
         KeyboardState prevKState;
         GamePadState prevGState;
+        MouseState prevMState;
 
         Manager manager;
 
@@ -43,6 +44,7 @@ namespace SpaceTrucker
 
             prevKState = Keyboard.GetState();
             prevGState = GamePad.GetState(PlayerIndex.One);
+            prevMState = Mouse.GetState();
 
         }
 
@@ -77,14 +79,16 @@ namespace SpaceTrucker
             {
                 KeyboardState kState = Keyboard.GetState();
                 GamePadState gState = GamePad.GetState(PlayerIndex.One);
+                MouseState mState = Mouse.GetState();
                 //MouseState mState = Mouse.GetState();
 
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || kState.IsKeyDown(Keys.Escape))
                     Exit();
 
-                manager.update(gameTime, kState, prevKState, gState, prevGState);
+                manager.update(gameTime, kState, prevKState, mState, prevMState, gState, prevGState);
                 prevKState = kState;
                 prevGState = gState;
+                prevMState = mState;
 
                 base.Update(gameTime);
             }

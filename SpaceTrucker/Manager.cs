@@ -18,6 +18,8 @@ namespace SpaceTrucker
 
         public Player Player { get; private set; }
 
+        public List<Bullet> bullets;
+
         /// <summary>
         /// Width of the game screen.
         /// </summary>
@@ -26,6 +28,8 @@ namespace SpaceTrucker
         /// Height of the game screen.
         /// </summary>
         private int height;
+
+        private bool isGamepad;
 
         private Random r;
 
@@ -41,9 +45,11 @@ namespace SpaceTrucker
         {
             this.width = width;
             this.height = height;
+            isGamepad = false;
 
-            Player = new Player(playerMesh, new Vector2(300, 100), this);
+            Player = new Player(playerMesh, new Vector2(300, 100));
             Object.setManager(this);
+            bullets = new List<Bullet>();
         }
 
         public void loadContent(ContentManager content)
@@ -53,17 +59,35 @@ namespace SpaceTrucker
             playerMesh = new Mesh(playerSprite, true); //Switch to false to get more accurate mesh
         }
 
-        public void update(GameTime gameTime, KeyboardState kState, KeyboardState prevKState, GamePadState gState, GamePadState prevGState)
+        public void update(GameTime gameTime, KeyboardState kState, KeyboardState prevKState, MouseState mState, MouseState prevMState, GamePadState gState, GamePadState prevGState)
         {
-            // If someone is operating keyboard
-            if (kState.GetPressedKeys().Length != 0)
+            if (isGamepad)
             {
-                Player.processInput(kState, prevKState, gameTime);
+                // If someone is operating keyboard
+                if (kState.GetPressedKeys().Length != 0)
+                {
+                    Player.processInput(kState, prevKState, mState, prevMState, gameTime);
+                    isGamepad = false;
+                }
+                // Otherwise, assume Game Pad controls
+                else
+                {
+                    Player.processInput(gState, prevGState, gameTime);
+                }
             }
-            // Otherwise, assume Game Pad controls
             else
             {
-                Player.processInput(gState, prevGState, gameTime);
+                // If the gamepad is being used
+                if (!gState.Equals(GamePadState.Default))
+                {
+                    Player.processInput(gState, prevGState, gameTime);
+                    isGamepad = true;
+                }
+                // Otherwise, use Keyboard and Mouse
+                else
+                {
+                    Player.processInput(kState, prevKState, mState, prevMState, gameTime);
+                }
             }
             Player.update(gameTime, width, height);
 

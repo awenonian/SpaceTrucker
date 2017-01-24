@@ -63,29 +63,35 @@ namespace SpaceTrucker
         /// <param name="state">
         /// The current state of the keyboard
         /// </param>
-        public void processInput(KeyboardState state, KeyboardState prevState, GameTime gameTime)
+        public void processInput(KeyboardState kState, KeyboardState prevKState, MouseState mState, MouseState prevMState, GameTime gameTime)
         {
-            if (state.IsKeyDown(Keys.Space) && !prevState.IsKeyDown(Keys.Space))
+            if (kState.IsKeyDown(Keys.Space) && !prevKState.IsKeyDown(Keys.Space))
             {
                 controlScheme = (controlScheme + 1) % 2;
             }
+
+            if (mState.LeftButton == ButtonState.Pressed && prevMState.LeftButton == ButtonState.Released)
+            {
+                
+            }
+
             switch (controlScheme)
             {
                case 0: //Turning, acceleration
-                    if (state.IsKeyDown(Keys.A))
+                    if (kState.IsKeyDown(Keys.A))
                     {
                         Facing -= turnSpeed * gameTime.ElapsedGameTime.TotalSeconds;
                     }
-                    else if (state.IsKeyDown(Keys.D))
+                    else if (kState.IsKeyDown(Keys.D))
                     {
                         Facing += turnSpeed * gameTime.ElapsedGameTime.TotalSeconds;
                     }
 
-                    if (state.IsKeyDown(Keys.W))
+                    if (kState.IsKeyDown(Keys.W))
                     {
                         Speed += (float)(thrust * gameTime.ElapsedGameTime.TotalSeconds) * new Vector2((float)Math.Cos(Facing), (float)Math.Sin(Facing));
                     }
-                    else if (state.IsKeyDown(Keys.S))
+                    else if (kState.IsKeyDown(Keys.S))
                     {
                         Speed -= (float)(thrust * gameTime.ElapsedGameTime.TotalSeconds) * new Vector2((float)Math.Cos(Facing), (float)Math.Sin(Facing));
                     }
@@ -97,22 +103,22 @@ namespace SpaceTrucker
                 case 1: //Move in direction pressed
                     Vector2 direction = Vector2.Zero;
 
-                    if (state.IsKeyDown(Keys.W))
+                    if (kState.IsKeyDown(Keys.W))
                     {
                         direction -= Vector2.UnitY;
                     }
 
-                    if (state.IsKeyDown(Keys.S))
+                    if (kState.IsKeyDown(Keys.S))
                     {
                         direction += Vector2.UnitY;
                     }
 
-                    if (state.IsKeyDown(Keys.A))
+                    if (kState.IsKeyDown(Keys.A))
                     {
                         direction -= Vector2.UnitX;
                     }
 
-                    if (state.IsKeyDown(Keys.D))
+                    if (kState.IsKeyDown(Keys.D))
                     {
                         direction += Vector2.UnitX;
                     }
