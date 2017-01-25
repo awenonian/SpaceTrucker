@@ -63,13 +63,18 @@ namespace SpaceTrucker
                 controlScheme = (controlScheme + 1) % 2;
             }
 
-            if (mState.LeftButton == ButtonState.Pressed && prevMState.LeftButton == ButtonState.Released)
+            if (mState.LeftButton == ButtonState.Pressed /* && prevMState.LeftButton == ButtonState.Released */)
             {
+
+                // NOTE: Firing is unrestricted when facing down or left. This needs fixing.
+
                 // Find angle of fire, corrected for facing direction
                 double firingAngle = Math.Atan2(mState.Position.Y - Position.Y, mState.Position.X - Position.X) - Facing;
+                Console.WriteLine(firingAngle);
+                Console.WriteLine(Facing);
                 // If the angle is in the allowable area (full 180 on the left, 10 degree arc to the right)
                 // More accurately, if it's not in the disallowable area.
-                if (!((firingAngle > 180 && firingAngle < 265) || (firingAngle > 275 && firingAngle < 360)))
+                if (!((firingAngle < Math.PI && firingAngle > (13*Math.PI / 24)) || (firingAngle < (11 * Math.PI / 24) && firingAngle > 0)))
                 {
                     // Correct back
                     firingAngle += Facing;
