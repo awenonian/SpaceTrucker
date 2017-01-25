@@ -66,14 +66,14 @@ namespace SpaceTrucker
             if (mState.LeftButton == ButtonState.Pressed /* && prevMState.LeftButton == ButtonState.Released */)
             {
 
-                // NOTE: Firing is unrestricted when facing down or left. This needs fixing.
+                // NOTE: Firing is unrestricted when facing in certain directions.
+                // This whole thing exhibits weird behavior. Can one of you look at it to check it out?
 
                 // Find angle of fire, corrected for facing direction
                 double firingAngle = Math.Atan2(mState.Position.Y - Position.Y, mState.Position.X - Position.X) - Facing;
-                Console.WriteLine(firingAngle);
-                Console.WriteLine(Facing);
-                // If the angle is in the allowable area (full 180 on the left, 10 degree arc to the right)
-                // More accurately, if it's not in the disallowable area.
+                // If the angle is in the allowable area (full 180 on the left, Pi/12 radian arc to the right)
+                // More accurately, if it's not in the disallowable area. 
+                // (this seems odd. For some reason, these angles seem to coorespond to the wrong side.)
                 if (!((firingAngle < Math.PI && firingAngle > (13*Math.PI / 24)) || (firingAngle < (11 * Math.PI / 24) && firingAngle > 0)))
                 {
                     // Correct back
