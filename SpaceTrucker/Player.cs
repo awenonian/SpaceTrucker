@@ -66,15 +66,14 @@ namespace SpaceTrucker
             if (mState.LeftButton == ButtonState.Pressed /* && prevMState.LeftButton == ButtonState.Released */)
             {
                 // Exploration of the problem has led me to these:
-                    // The restriction on firing angle works perfectly, unless Facing is positive.
-                    // Essentially, once the corrected firing angle becomes negative, the restrictions fail. So, we need to stop that.
+                    // The restriction on firing angle works perfectly, unless Facing is too positive.
+                    // Essentially, once the corrected firing angle stops being in the -PI to PI range, the restrictions fail.
 
                 // Find angle of fire, corrected for facing direction
                 double firingAngle = Math.Atan2(mState.Position.Y - Position.Y, mState.Position.X - Position.X) - Facing;
                 firingAngle = firingAngle % (2 * Math.PI);
                 // If the angle is in the allowable area (full 180 on the left, Pi/12 radian arc to the right)
                 // More accurately, if it's not in the disallowable area. 
-                // (this seems odd. For some reason, these angles seem to coorespond to the wrong side.)
                 if (!((firingAngle < Math.PI && firingAngle > (13*Math.PI / 24)) || (firingAngle < (11 * Math.PI / 24) && firingAngle > 0)))
                 {
                     // Correct back
