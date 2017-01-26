@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/aweno/Documents/Visual Studio 2015/Projects/SpaceTrucker/SpaceTrucker/Content/Bullet.png</SourceFile>
-  <SourceTime>2017-01-24T13:08:08.9705379-05:00</SourceTime>
-  <DestFile>C:/Users/aweno/Documents/Visual Studio 2015/Projects/SpaceTrucker/SpaceTrucker/Content/bin/Windows/Bullet.xnb</DestFile>
-  <DestTime>2017-01-24T13:22:24.1655267-05:00</DestTime>
+  <SourceFile>D:/Computer/Documents/Visual Studio 2015/Projects/SpaceTrucker/SpaceTrucker/Content/Bullet.png</SourceFile>
+  <SourceTime>2017-01-25T22:37:56.6791092-05:00</SourceTime>
+  <DestFile>D:/Computer/Documents/Visual Studio 2015/Projects/SpaceTrucker/SpaceTrucker/Content/bin/Windows/Bullet.xnb</DestFile>
+  <DestTime>2017-01-25T22:39:46.3244897-05:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T02:36:08-04:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
