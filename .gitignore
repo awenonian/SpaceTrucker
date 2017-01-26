@@ -1,0 +1,5 @@
+/SpaceTrucker/bin/*
+/SpaceTrucker/obj/*
+/SpaceTrucker/Content/bin/*
+/SpaceTrucker/Content/obj/*
+/.vs/*
