@@ -51,7 +51,7 @@ namespace SpaceTrucker
             isGamepad = false;
 
             Player = new Player(playerMesh, new Vector2(300, 100));
-            Object.setManager(this);
+            Managed.setManager(this);
             bullets = new List<Bullet>();
         }
 
@@ -64,7 +64,8 @@ namespace SpaceTrucker
 
             bulletSprite = content.Load<Texture2D>("Bullet"); //Placeholder sprite, but eh.
             bulletMesh = new Mesh(bulletSprite, true); //Switch to false to get more accurate mesh
-            Bullet.setMesh(bulletMesh);
+
+            new Bullet(bulletMesh, 1000f); //This seems like bad practice. Can someone clean this up?
         }
 
         public void update(GameTime gameTime, KeyboardState kState, KeyboardState prevKState, MouseState mState, MouseState prevMState, GamePadState gState, GamePadState prevGState)

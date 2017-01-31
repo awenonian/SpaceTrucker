@@ -8,12 +8,10 @@ using System.Threading.Tasks;
 
 namespace SpaceTrucker
 {
-    abstract class Object
+    abstract class Object : Managed
     {
         public Mesh mesh { get; }
         private Vector2 position;
-
-        protected static Manager manager = null;
 
         public Vector2 Position { get; protected set; }
         
@@ -55,11 +53,6 @@ namespace SpaceTrucker
         public bool collision(Object other)
         {
             return mesh.collision(Position, other.Position, other.mesh);
-        }
-
-        public static void setManager(Manager m)
-        {
-            manager = m;
         }
     }
 }

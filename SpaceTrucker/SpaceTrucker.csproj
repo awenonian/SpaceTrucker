@@ -40,12 +40,15 @@
   <ItemGroup>
     <Compile Include="Bullet.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Gun.cs" />
+    <Compile Include="Managed.cs" />
     <Compile Include="Manager.cs" />
     <Compile Include="Mesh.cs" />
     <Compile Include="Object.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ship.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
