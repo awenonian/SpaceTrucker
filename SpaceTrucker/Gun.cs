@@ -15,34 +15,38 @@ namespace SpaceTrucker
         private double timer;
         private double coolDown;
 
-        public Gun(double coolDown)
+        private double facing;
+
+        private double lowerBound;
+        private double upperBound;
+
+        public Gun(double coolDown, double lowerBound, double upperBound)
         {
             this.coolDown = coolDown;
+            this.lowerBound = lowerBound;
+            this.upperBound = upperBound;
+
             canFire = true;
             timer = 0;
         }
 
-        public void fire(Vector2 position, Vector2 direction)
+        public void fire(Vector2 position, double facing, Vector2 direction)
         {
-            if (canFire)
-            {
-                manager.addBullet(new Bullet(position, direction));
-                canFire = false;
-                timer = coolDown;
-            }
+            fire(position, facing, Math.Atan2(direction.Y, direction.X));
         }
 
-        public void fire(Vector2 position, double firingAngle)
+        public void fire(Vector2 position, double facing, double firingAngle)
         {
-           
-            if (canFire)
+            firingAngle -= facing;
+            if (canFire && firingAngle > lowerBound && firingAngle < upperBound)
             {
+                firingAngle += facing;
                 manager.addBullet(new Bullet(position, new Vector2((float)Math.Cos(firingAngle), (float)Math.Sin(firingAngle))));
                 canFire = false;
                 timer = coolDown;
             }
         }
-
+        
         public void update(GameTime gameTime)
         {
             timer -= gameTime.ElapsedGameTime.TotalSeconds;

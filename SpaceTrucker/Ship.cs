@@ -13,21 +13,25 @@ namespace SpaceTrucker
         protected float thrust;
         protected double turnSpeed;
 
-        protected Gun g;
+        protected Gun[] guns;
 
         public Ship(Mesh mesh, Vector2 position, float moveSpeed, float thrust, float turnSpeed) : base(mesh, position)
         {
             this.moveSpeed = moveSpeed;
             this.thrust = thrust;
             this.turnSpeed = turnSpeed;
-            g = new Gun(.01f);
+            guns = new Gun[2];
+            guns[0] = new Gun(.01f, 0, Math.PI);
+            guns[1] = new Gun(.01f, -17 * Math.PI / 16, -15 * Math.PI / 16);
         }
 
         public override void update(GameTime gameTime, int width, int height)
         {
             base.update(gameTime, width, height);
-
-            g.update(gameTime);
+            foreach (Gun g in guns)
+            {
+                g.update(gameTime);
+            }
         }
 
         public void onCollision(Object o)
@@ -37,17 +41,9 @@ namespace SpaceTrucker
 
         public void fire(double firingAngle)
         {
-            // Find angle of fire, corrected for facing direction
-            firingAngle -= Facing;
-            firingAngle = firingAngle % (2 * Math.PI);
-
-            // If the angle is in the allowable area (full 180 on the left, Pi/12 radian arc to the right)
-            // More accurately, if it's not in the disallowable area. 
-            if (!((firingAngle < -Math.PI) || (firingAngle < Math.PI && firingAngle > (13 * Math.PI / 24)) || (firingAngle < (11 * Math.PI / 24) && firingAngle > 0)))
-            { 
-                // Correct back
-                firingAngle += Facing;
-                g.fire(Position, new Vector2((float)Math.Cos(firingAngle), (float)Math.Sin(firingAngle)));
+            foreach (Gun g in guns)
+            {
+                g.fire(Position, Facing, firingAngle);
             }
         }
 
