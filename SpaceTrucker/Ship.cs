@@ -21,8 +21,8 @@ namespace SpaceTrucker
             this.thrust = thrust;
             this.turnSpeed = turnSpeed;
             guns = new Gun[2];
-            guns[0] = new Gun(.01f, 0, Math.PI);
-            guns[1] = new Gun(.01f, -17 * Math.PI / 16, -15 * Math.PI / 16);
+            guns[0] = new Gun(.01f, -Math.PI, 0, this);
+            guns[1] = new Gun(.01f, 7 * Math.PI / 16, 9 * Math.PI / 16, this);
         }
 
         public override void update(GameTime gameTime, int width, int height)
@@ -43,7 +43,7 @@ namespace SpaceTrucker
         {
             foreach (Gun g in guns)
             {
-                g.fire(Position, Facing, firingAngle);
+                g.fire(Position, firingAngle);
             }
         }
 

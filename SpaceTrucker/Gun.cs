@@ -10,37 +10,44 @@ namespace SpaceTrucker
     class Gun : Managed
     {
 
-        //private Bullet b; This should be like a Type or something. It's supposed to differentiate what type of bullet gets fired.
+        //private Bullet b; This will be a subclass of bullet. 
+        //Each subclass should override a "copy" method that returns a new copy of it's bullet type, given a direction and position
         private bool canFire;
         private double timer;
         private double coolDown;
 
-        private double facing;
-
         private double lowerBound;
         private double upperBound;
 
-        public Gun(double coolDown, double lowerBound, double upperBound)
+        private Ship ship;
+
+        public Gun(double coolDown, double lowerBound, double upperBound, Ship ship)
         {
             this.coolDown = coolDown;
             this.lowerBound = lowerBound;
             this.upperBound = upperBound;
 
+            this.ship = ship;
+
             canFire = true;
             timer = 0;
         }
 
-        public void fire(Vector2 position, double facing, Vector2 direction)
+        public void fire(Vector2 position, Vector2 direction)
         {
-            fire(position, facing, Math.Atan2(direction.Y, direction.X));
+            fire(position, Math.Atan2(direction.Y, direction.X));
         }
 
-        public void fire(Vector2 position, double facing, double firingAngle)
+        public void fire(Vector2 position, double firingAngle)
         {
-            firingAngle -= facing;
+            firingAngle -= ship.Facing;
+            // Should do corrections to keep it between -PI and PI
+            firingAngle = firingAngle > Math.PI ? firingAngle - (2 * Math.PI) : firingAngle;
+            firingAngle = firingAngle < -Math.PI ? firingAngle + (2 * Math.PI) : firingAngle;
+
             if (canFire && firingAngle > lowerBound && firingAngle < upperBound)
             {
-                firingAngle += facing;
+                firingAngle += ship.Facing;
                 manager.addBullet(new Bullet(position, new Vector2((float)Math.Cos(firingAngle), (float)Math.Sin(firingAngle))));
                 canFire = false;
                 timer = coolDown;
