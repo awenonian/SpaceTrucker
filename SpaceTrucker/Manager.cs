@@ -66,6 +66,8 @@ namespace SpaceTrucker
             bulletMesh = new Mesh(bulletSprite, true); //Switch to false to get more accurate mesh
 
             new Bullet(bulletMesh, 1000f); //This seems like bad practice. Can someone clean this up?
+            // For clarity, this is initializing the static values for bullets: Their mesh, and speed.
+            // It seems like there may be a better way to do this
         }
 
         public void update(GameTime gameTime, KeyboardState kState, KeyboardState prevKState, MouseState mState, MouseState prevMState, GamePadState gState, GamePadState prevGState)

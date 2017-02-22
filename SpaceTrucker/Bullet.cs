@@ -23,5 +23,10 @@ namespace SpaceTrucker
             Bullet.bulletMesh = mesh;
             Bullet.moveSpeed = moveSpeed;
         }
+
+        public virtual Bullet copy(Vector2 position, Vector2 direction)
+        {
+            return new Bullet(position, direction);
+        }
     }
 }

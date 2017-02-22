@@ -11,8 +11,7 @@ namespace SpaceTrucker
     class Gun : Managed
     {
 
-        //private Bullet b; This will be a subclass of bullet. 
-        //Each subclass should override a "copy" method that returns a new copy of it's bullet type, given a direction and position
+        private Bullet b; 
         private bool canFire;
         private double timer;
         private double coolDown;
@@ -25,12 +24,14 @@ namespace SpaceTrucker
 
         private Ship ship;
 
-        public Gun(Vector2 offset, double coolDown, double lowerBound, double upperBound, Ship ship)
+        public Gun(Vector2 offset, double coolDown, double lowerBound, double upperBound, Bullet b, Ship ship)
         {
             this.offset = offset;
             this.coolDown = coolDown;
             this.lowerBound = lowerBound;
             this.upperBound = upperBound;
+
+            this.b = b;
 
             firingArc = generateArc(32, lowerBound, upperBound);
 
@@ -42,7 +43,25 @@ namespace SpaceTrucker
 
         private Texture2D generateArc(int size, double lowerBound, double upperBound)
         {
-            return null;
+            Texture2D arcTex = new Texture2D(/*Graphics device?*/null, size, size);
+            Color[] arc = new Color[size * size];
+            for (int i = 0; i < arc.Length; i++)
+            {
+                int middle = size / 2;
+                int dx = (i / size) - middle;
+                int dy = (i % size) - middle;
+                if (dx * dx + dy * dy > middle * middle)
+                {
+                    continue;
+                }
+                double angle = Math.Atan2(dy, dx);
+                if (angle >= lowerBound && angle <= upperBound)
+                {
+                    arc[i] = Color.Red;
+                }
+            }
+            arcTex.SetData<Color>(arc);
+            return arcTex;
         }
 
         public void fire(Vector2 position, Vector2 target)
@@ -63,7 +82,7 @@ namespace SpaceTrucker
             if (canFire && firingAngle > lowerBound && firingAngle < upperBound)
             {
                 firingAngle += ship.Facing;
-                manager.addBullet(new Bullet(position, new Vector2((float)Math.Cos(firingAngle), (float)Math.Sin(firingAngle))));
+                manager.addBullet(b.copy(position, new Vector2((float)Math.Cos(firingAngle), (float)Math.Sin(firingAngle))));
                 canFire = false;
                 timer = coolDown;
             }
