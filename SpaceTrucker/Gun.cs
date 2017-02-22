@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,16 +17,22 @@ namespace SpaceTrucker
         private double timer;
         private double coolDown;
 
+        private Vector2 offset;
         private double lowerBound;
         private double upperBound;
 
+        private Texture2D firingArc;
+
         private Ship ship;
 
-        public Gun(double coolDown, double lowerBound, double upperBound, Ship ship)
+        public Gun(Vector2 offset, double coolDown, double lowerBound, double upperBound, Ship ship)
         {
+            this.offset = offset;
             this.coolDown = coolDown;
             this.lowerBound = lowerBound;
             this.upperBound = upperBound;
+
+            firingArc = generateArc(32, lowerBound, upperBound);
 
             this.ship = ship;
 
@@ -33,9 +40,17 @@ namespace SpaceTrucker
             timer = 0;
         }
 
-        public void fire(Vector2 position, Vector2 direction)
+        private Texture2D generateArc(int size, double lowerBound, double upperBound)
         {
-            fire(position, Math.Atan2(direction.Y, direction.X));
+            return null;
+        }
+
+        public void fire(Vector2 position, Vector2 target)
+        {
+            // Rotates a vector by ship.Facing
+            Vector2 rotatedOffset = new Vector2((offset.X * (float) Math.Cos(ship.Facing)) - (offset.Y * (float) Math.Sin(ship.Facing)), (offset.X * (float)Math.Sin(ship.Facing)) + (offset.Y * (float)Math.Cos(ship.Facing)));
+            Vector2 origin = position + rotatedOffset;
+            fire(origin, Math.Atan2(target.Y - origin.Y, target.X - origin.X));
         }
 
         public void fire(Vector2 position, double firingAngle)

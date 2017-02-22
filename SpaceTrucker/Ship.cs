@@ -21,8 +21,8 @@ namespace SpaceTrucker
             this.thrust = thrust;
             this.turnSpeed = turnSpeed;
             guns = new Gun[2];
-            guns[0] = new Gun(.01f, -Math.PI, 0, this);
-            guns[1] = new Gun(.01f, 7 * Math.PI / 16, 9 * Math.PI / 16, this);
+            guns[0] = new Gun(new Vector2(0, -mesh.Height / 2), .01f, -Math.PI, 0, this);
+            guns[1] = new Gun(Vector2.Zero, .01f, 7 * Math.PI / 16, 9 * Math.PI / 16, this);
         }
 
         public override void update(GameTime gameTime, int width, int height)
@@ -39,17 +39,12 @@ namespace SpaceTrucker
             // What to do when you collide with Object o
         }
 
-        public void fire(double firingAngle)
+        public void fire(Vector2 target)
         {
             foreach (Gun g in guns)
             {
-                g.fire(Position, firingAngle);
+                g.fire(Position, target);
             }
-        }
-
-        public void fire(Vector2 position)
-        {
-            fire(Math.Atan2(position.Y - Position.Y, position.X - Position.X));
         }
 
         public void move(Vector2 direction, GameTime gameTime)
