@@ -24,7 +24,7 @@ namespace SpaceTrucker
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             manager = new Manager();
-            gameTitle = "Game";
+            gameTitle = "Stellar Run";
         }
 
         /// <summary>
@@ -39,7 +39,8 @@ namespace SpaceTrucker
             base.Initialize();
             manager.initialize(
                 width: graphics.GraphicsDevice.Viewport.Width,
-                height: graphics.GraphicsDevice.Viewport.Height);
+                height: graphics.GraphicsDevice.Viewport.Height,
+                gd: GraphicsDevice);
             IsMouseVisible = true;
 
             prevKState = Keyboard.GetState();
@@ -66,6 +67,7 @@ namespace SpaceTrucker
         protected override void UnloadContent()
         {
             Content.Unload();
+            manager.gd.Dispose();
         }
 
         /// <summary>

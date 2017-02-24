@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace SpaceTrucker
 {
@@ -65,6 +66,15 @@ namespace SpaceTrucker
             if (Speed.Length() > moveSpeed)
             {
                 Speed = Vector2.Normalize(Speed) * moveSpeed;
+            }
+        }
+
+        public override void draw(SpriteBatch sb)
+        {
+            base.draw(sb);
+            foreach(Gun g in guns)
+            {
+                g.draw(sb);
             }
         }
     }

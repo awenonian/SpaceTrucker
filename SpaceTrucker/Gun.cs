@@ -33,7 +33,7 @@ namespace SpaceTrucker
 
             this.b = b;
 
-            firingArc = generateArc(32, lowerBound, upperBound);
+            firingArc = generateArc(64, lowerBound, upperBound);
 
             this.ship = ship;
 
@@ -43,24 +43,27 @@ namespace SpaceTrucker
 
         private Texture2D generateArc(int size, double lowerBound, double upperBound)
         {
-            Texture2D arcTex = new Texture2D(/*Graphics device?*/null, size, size);
+            // This needs a GraphicsDevice, but I don't know how they work.
+            Texture2D arcTex = new Texture2D(manager.gd, size, size);
             Color[] arc = new Color[size * size];
             for (int i = 0; i < arc.Length; i++)
             {
                 int middle = size / 2;
-                int dx = (i / size) - middle;
-                int dy = (i % size) - middle;
-                if (dx * dx + dy * dy > middle * middle)
+                int dx = (i % size) - middle;
+                int dy = (i / size) - middle;
+                double distanceSquared = dx * dx + dy * dy;
+                if (distanceSquared >= middle * middle)
                 {
                     continue;
                 }
                 double angle = Math.Atan2(dy, dx);
-                if (angle >= lowerBound && angle <= upperBound)
+                if (angle >= lowerBound && angle < upperBound)
                 {
                     arc[i] = Color.Red;
+                    arc[i].A = (byte) (255 * ((middle * middle) - distanceSquared) / (middle * middle));
                 }
             }
-            arcTex.SetData<Color>(arc);
+            arcTex.SetData(arc);
             return arcTex;
         }
 
@@ -95,6 +98,13 @@ namespace SpaceTrucker
             {
                 canFire = true;
             }
+        }
+
+        public void draw(SpriteBatch sb)
+        {
+            Vector2 rotatedOffset = new Vector2((offset.X * (float)Math.Cos(ship.Facing)) - (offset.Y * (float)Math.Sin(ship.Facing)), (offset.X * (float)Math.Sin(ship.Facing)) + (offset.Y * (float)Math.Cos(ship.Facing)));
+
+            sb.Draw(firingArc, ship.Position + rotatedOffset, new Rectangle(0, 0, firingArc.Width, firingArc.Height), Color.White, (float)ship.Facing, new Vector2(firingArc.Width / 2, firingArc.Height / 2), 1f, SpriteEffects.None, 0);
         }
     }
 }

@@ -45,7 +45,7 @@ namespace SpaceTrucker
         /// <param name="sb">
         /// The spritebatch for drawing
         /// </param>
-        public void draw(SpriteBatch sb)
+        public virtual void draw(SpriteBatch sb)
         {
             sb.Draw(mesh.sprite, Position, new Rectangle(0, 0, mesh.Width, mesh.Height), Color.White, (float) Facing, new Vector2(mesh.Width / 2, mesh.Height / 2), 1f, SpriteEffects.None, 0);
         }

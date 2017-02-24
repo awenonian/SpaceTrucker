@@ -19,6 +19,8 @@ namespace SpaceTrucker
         private Texture2D bulletSprite;
         private Mesh bulletMesh;
 
+        public GraphicsDevice gd { get; private set; }
+
         public Player Player { get; private set; }
 
         public List<Bullet> bullets;
@@ -44,14 +46,15 @@ namespace SpaceTrucker
             r = new Random();
         }
 
-        public void initialize(int width, int height)
+        public void initialize(int width, int height, GraphicsDevice gd)
         {
             this.width = width;
             this.height = height;
+            this.gd = gd;
             isGamepad = false;
+            Managed.setManager(this);
 
             Player = new Player(playerMesh, new Vector2(300, 100));
-            Managed.setManager(this);
             bullets = new List<Bullet>();
         }
 
@@ -116,7 +119,8 @@ namespace SpaceTrucker
         public void draw(SpriteBatch sb)
         {
             //sb.Draw(background, destinationRectangle: new Rectangle(0, 0, width, height));
-            sb.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
+            // Some advice said to not use NonPremultiplied, but it's the one that produces the correct result. Perhaps we should look into this.
+            sb.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearWrap, null, null);
             Player.draw(sb);
             sb.End();
             sb.Begin(SpriteSortMode.Deferred, null, SamplerState.LinearWrap, null, null);
