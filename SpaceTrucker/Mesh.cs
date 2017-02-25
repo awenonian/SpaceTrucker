@@ -28,6 +28,8 @@ namespace SpaceTrucker
             mesh = new List<Rectangle>();
             if (simpleCollisions)
             {
+                // Model as a rectangle
+                // This will need to be updated to act like 4 points, instead of a rectangle
                 mesh.Add(sprite.Bounds);
             }
             else
@@ -189,6 +191,22 @@ namespace SpaceTrucker
                 }
             }
             return mesh;
+        }
+
+        private List<Vector2> calculateMesh(bool[,] outline)
+        {
+            // Assume black pixels for the outline, and white for every other piont. 
+            // Do not assume that the only black points are a hull. Do not use points that are not part of the hull
+
+            // Find a starting point, for this point, and only this point, trace the line in both directions, to assure you have it's end points
+            // Afterwards, load points into a list, with one end point being before the other. Starting from the last end point on the list, find the next vertex
+            // Through line analysis, and add it to the end of the list. Repeat until you come across the end point at the start of the list, somewhere along your line.
+                // Line analysis is the following steps:
+                    // In each cardinal direction, check the pixel there, and to it's right and left, continue in that direction until you find a diagonal. From that diagonal
+                    // performt he same procedure, assuming a minimum of the first straight line length. Once confirmed on the straight line length, continue on that trajectory
+                    // until a deviation is found. The point right before the deviation is the end point. perform the same check from there, until you complete the cycle.
+            // Return this complete list.
+            return null;
         }
 
         public bool collision(Vector2 pos, Vector2 otherPos, Mesh other)
