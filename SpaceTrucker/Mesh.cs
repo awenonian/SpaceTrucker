@@ -259,37 +259,76 @@ namespace SpaceTrucker
                 switch ((start + i) % 4)
                 {
                     case 0:
+                        // Go forward for as long as you can
                         while (outline[x+1, y])
                         {
                             length++;
                             x++;
                         }
+                        // Check if we deflect up or down
                         if (outline[x+1, y+1])
                         {
-                            slope[1] = 1;
+                            // We need to check if the line actually continues like this, or if it's going off in a different direaction.
                             if (outline[x + length, y+1])
                             {
+                                x += length;
+                                y++;
+                                // The initial length being to short isn't a problem, because we may have started part way through a segment,
+                                // whereas if the initial length is too long (what we checked above), then we're looking at two different segments:
+                                // **          ****
+                                //   ***    vs     *
+                                //      ***         *
 
-                            }
-                            else
-                            {
+                                // ? Should we actually do it that way ? 
+                                // Or should any deviation be treated as a separate segment? 
+                                // Or, perhaps neither should be, and that should be left up to the slope finding algorithm
+                                    // ^ go with that one, number 3.
+                                while (outline[x + 1, y])
+                                {
+                                    length++;
+                                    x++;
+                                }
+
+                                slope[1] = 1;
                                 slope[0] = length;
                                 return slope;
+                            } else
+                            {
+                                // The rest isn't a continuation of this line, as the slope has changed. 
+                                // So this should be just a straight line
+
+                                slope[0] = 1;
+                                slope[1] = 0;
+                                return slope;
+
                             }
+
+
+
                         }
-                        else if ( outline[x+1, y-1])
+                        else if (outline[x+1, y-1])
                         {
+                            // Our line is sloping down as it goes left
                             slope[1] = -1;
+                            // We need to confirm how long the slope is, because we may have started part way through a segment
                             if (outline[x + length, y - 1])
                             {
+                                // Update our checking coordinates
+                                x += length;
+                                y--;
+                                // Figure out how long the slope actually is
+                                while (outline[x + 1, y])
+                                {
+                                    length++;
+                                    x++;
+                                }
+                            }
 
-                            }
-                            else
-                            {
-                                slope[0] = length;
-                                return slope;
-                            }
+                            slope[0] = length;
+                            return slope;
+
                         }
+                        // Turns out, this was just a straight line. Gotta return a 1 so we can trace it back
                         else
                         {
                             slope[0] = 1;
@@ -313,7 +352,11 @@ namespace SpaceTrucker
         private Vector2 findEnd(bool[,] outline, int x, int y, int dx, int dy)
         {
             // Follow slope along, checking that pattern is followed.
+            // Do NOT assume that you are starting at any particular place in the segment.
+                // That is, if you get a slope of 5 by 1, don't assume you have to go all 5 your first go, or your last go
             // Assume thin line (i.e. pixels are connected by corners, not faces)
+                // This means that each time you cross a diagonal, at least one of the non-linear diagonals should be empty 
+                // (not part of the outline, and not part of the interior)
             return Vector2.Zero;
         }
 
