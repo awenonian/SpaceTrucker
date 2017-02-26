@@ -195,18 +195,131 @@ namespace SpaceTrucker
 
         private List<Vector2> calculateMesh(bool[,] outline)
         {
-            // Assume black pixels for the outline, and white for every other piont. 
-            // Do not assume that the only black points are a hull. Do not use points that are not part of the hull
+            // Assume true for the outline, and false for every other point. 
+            // There may be true points that are not connected to the hull, you can ignore these
+
+            List<Vector2> points = new List<Vector2>();
+
+            for (int i = 0; i < outline.GetLength(0); i++)
+            {
+                for (int j = 0; j < outline.GetLength(1); j++)
+                {
+                    if (outline[i,j])
+                    {
+                        // Found start point
+                        // Find the slope, but start your search going backwards, since this is the top left most filled point
+                        int[] slope = findSlope(outline, i, j, 2);
+                        Vector2 end = findEnd(outline, i, j, slope[0], slope[1]);
+                        points.Add(findEnd(outline, (int)end.X, (int)end.Y, -slope[0], -slope[1]));
+                        points.Add(end);
+                        break;
+                    }
+                }
+            }
+
+            findHull(outline, points);
 
             // Find a starting point, for this point, and only this point, trace the line in both directions, to assure you have it's end points
             // Afterwards, load points into a list, with one end point being before the other. Starting from the last end point on the list, find the next vertex
             // Through line analysis, and add it to the end of the list. Repeat until you come across the end point at the start of the list, somewhere along your line.
                 // Line analysis is the following steps:
                     // In each cardinal direction, check the pixel there, and to it's right and left, continue in that direction until you find a diagonal. From that diagonal
-                    // performt he same procedure, assuming a minimum of the first straight line length. Once confirmed on the straight line length, continue on that trajectory
+                    // perform the same procedure, assuming a minimum of the first straight line length. Once confirmed on the straight line length, continue on that trajectory
                     // until a deviation is found. The point right before the deviation is the end point. perform the same check from there, until you complete the cycle.
             // Return this complete list.
+            return points;
+        }
+
+        /// <summary>
+        /// Finds the slope of the line with the given point in it (generally at its end)
+        /// </summary>
+        /// <param name="outline">
+        /// The image to search through, passed as a boolean array containing it's outline
+        /// </param>
+        /// <param name="x">
+        /// The x of the point to start form
+        /// </param>
+        /// <param name="y">
+        /// The y of the point to start from
+        /// </param>
+        /// <param name="start">
+        /// Optional parameter for which cardinal direction to start your search from 
+        /// (0 for right/east, +1 for every 90 degrees counterclockwise)
+        /// </param>
+        /// <returns>
+        /// The dx and dy of the line, in an int array, with x as [0] and y as [1]
+        /// </returns>
+        private int[] findSlope( bool[,] outline, int x, int y, int start = 0)
+        {
+            // This code needs a lot of bounds checking. I'm not going to put it in while I code the basic outline though.
+            int[] slope = new int[2];
+            for (int i = 0; i < 4; i++)
+            {
+                int length = 0;
+                switch ((start + i) % 4)
+                {
+                    case 0:
+                        while (outline[x+1, y])
+                        {
+                            length++;
+                            x++;
+                        }
+                        if (outline[x+1, y+1])
+                        {
+                            slope[1] = 1;
+                            if (outline[x + length, y+1])
+                            {
+
+                            }
+                            else
+                            {
+                                slope[0] = length;
+                                return slope;
+                            }
+                        }
+                        else if ( outline[x+1, y-1])
+                        {
+                            slope[1] = -1;
+                            if (outline[x + length, y - 1])
+                            {
+
+                            }
+                            else
+                            {
+                                slope[0] = length;
+                                return slope;
+                            }
+                        }
+                        else
+                        {
+                            slope[0] = 1;
+                            slope[1] = 0;
+                            return slope;
+                        }
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    default:
+                        break;
+                }
+            }
             return null;
+        }
+
+        private Vector2 findEnd(bool[,] outline, int x, int y, int dx, int dy)
+        {
+            // Follow slope along, checking that pattern is followed.
+            // Assume thin line (i.e. pixels are connected by corners, not faces)
+            return Vector2.Zero;
+        }
+
+        private void findHull(bool[,] outline, List<Vector2> points)
+        {
+            // From last point on the list, find the next point until you come across the first point in the list
         }
 
         public bool collision(Vector2 pos, Vector2 otherPos, Mesh other)
